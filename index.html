@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Payment Page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    text-align: center;
+    padding: 20px;
+}
+
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.timer {
+    font-size: 20px;
+    color: red;
+    font-weight: bold;
+}
+
+.amount {
+    font-size: 22px;
+    color: green;
+    margin: 10px 0;
+}
+
+button {
+    padding: 8px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+input {
+    width: 90%;
+    padding: 8px;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="timer">
+        Time Left: <span id="time">10:00</span>
+    </div>
+
+    <h2 id="appName">App Name</h2>
+
+    <div class="amount">
+        ₹ <span id="amount">0</span>
+    </div>
+
+    <p><b>UPI ID:</b></p>
+    <p id="upiId">test@upi</p>
+    <button onclick="copyUPI()">Copy UPI</button>
+
+    <br><br>
+
+    <input type="text" id="utr" placeholder="Enter UTR Number">
+    <br>
+    <button onclick="submitUTR()">Submit UTR</button>
+
+</div>
+
+<script>
+// Get URL parameters
+const params = new URLSearchParams(window.location.search);
+document.getElementById("appName").innerText = params.get("app") || "Demo App";
+document.getElementById("amount").innerText = params.get("amount") || "0";
+document.getElementById("upiId").innerText = params.get("upi") || "test@upi";
+
+// 10 minute timer
+let totalTime = 600;
+const timerElement = document.getElementById("time");
+
+const countdown = setInterval(function() {
+    let minutes = Math.floor(totalTime / 60);
+    let seconds = totalTime % 60;
+
+    if (seconds < 10) seconds = "0" + seconds;
+
+    timerElement.innerText = minutes + ":" + seconds;
+    totalTime--;
+
+    if (totalTime < 0) {
+        clearInterval(countdown);
+        timerElement.innerText = "Expired";
+    }
+}, 1000);
+
+// Copy UPI
+function copyUPI() {
+    const upi = document.getElementById("upiId").innerText;
+    navigator.clipboard.writeText(upi);
+    alert("UPI Copied");
+}
+
+// Submit UTR
+function submitUTR() {
+    const utr = document.getElementById("utr").value;
+    if (utr == "") {
+        alert("Enter UTR Number");
+    } else {
+        alert("UTR Submitted: " + utr);
+    }
+}
+</script>
+
+</body>
+</html>
