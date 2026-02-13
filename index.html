@@ -2,62 +2,113 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Payment Page</title>
+<title>Secure Payment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-    font-family: Arial;
-    background: #f2f2f2;
-    text-align: center;
-    padding: 20px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.box {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    width: 95%;
     max-width: 400px;
-    margin: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
 .timer {
-    font-size: 20px;
-    color: red;
+    background: rgba(255,255,255,0.2);
+    padding: 8px;
+    border-radius: 10px;
     font-weight: bold;
+    margin-bottom: 15px;
 }
 
 .amount {
-    font-size: 22px;
-    color: green;
+    font-size: 26px;
+    font-weight: bold;
     margin: 10px 0;
+    color: #00ffcc;
+}
+
+.upi-box {
+    background: rgba(255,255,255,0.2);
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px 0;
+    word-break: break-all;
 }
 
 button {
-    padding: 8px 15px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
     margin-top: 10px;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.copy-btn {
+    background: #00ffcc;
+    color: black;
+}
+
+.copy-btn:hover {
+    background: #00ddb3;
+}
+
+.submit-btn {
+    background: #ff4b5c;
+    color: white;
+}
+
+.submit-btn:hover {
+    background: #e63946;
 }
 
 input {
-    width: 90%;
-    padding: 8px;
-    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 15px;
+    outline: none;
 }
 
-.qr {
+.qr img {
     margin-top: 15px;
+    border-radius: 15px;
+    background: white;
+    padding: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="card">
 
     <div class="timer">
-        Time Left: <span id="time">10:00</span>
+        ⏳ Time Left: <span id="time">10:00</span>
     </div>
 
     <h2 id="appName">App Name</h2>
@@ -66,77 +117,16 @@ input {
         ₹ <span id="amount">0</span>
     </div>
 
-    <p><b>UPI ID:</b></p>
-    <p id="upiId">test@upi</p>
-    <button onclick="copyUPI()">Copy UPI</button>
+    <div class="upi-box">
+        <span id="upiId">test@upi</span>
+    </div>
+
+    <button class="copy-btn" onclick="copyUPI()">Copy UPI ID</button>
 
     <div class="qr">
         <img id="qrImage" width="200">
     </div>
 
-    <br>
-
     <input type="text" id="utr" placeholder="Enter UTR Number">
-    <br>
-    <button onclick="submitUTR()">Submit UTR</button>
 
-</div>
-
-<script>
-// Get URL parameters
-const params = new URLSearchParams(window.location.search);
-const app = params.get("app") || "Demo App";
-const amount = params.get("amount") || "0";
-const upi = params.get("upi") || "test@upi";
-
-document.getElementById("appName").innerText = app;
-document.getElementById("amount").innerText = amount;
-document.getElementById("upiId").innerText = upi;
-
-// Generate UPI payment link
-const upiLink = `upi://pay?pa=${upi}&pn=${app}&am=${amount}&cu=INR`;
-
-// Generate QR using Google Chart API
-document.getElementById("qrImage").src =
-`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(upiLink)}`;
-
-
-// 10 minute timer
-let totalTime = 600;
-const timerElement = document.getElementById("time");
-
-const countdown = setInterval(function() {
-    let minutes = Math.floor(totalTime / 60);
-    let seconds = totalTime % 60;
-
-    if (seconds < 10) seconds = "0" + seconds;
-
-    timerElement.innerText = minutes + ":" + seconds;
-    totalTime--;
-
-    if (totalTime < 0) {
-        clearInterval(countdown);
-        timerElement.innerText = "Expired";
-    }
-}, 1000);
-
-// Copy UPI
-function copyUPI() {
-    const upiText = document.getElementById("upiId").innerText;
-    navigator.clipboard.writeText(upiText);
-    alert("UPI Copied");
-}
-
-// Submit UTR
-function submitUTR() {
-    const utr = document.getElementById("utr").value;
-    if (utr == "") {
-        alert("Enter UTR Number");
-    } else {
-        alert("UTR Submitted: " + utr);
-    }
-}
-</script>
-
-</body>
-</html>
+    <button class="submit-btn" onclick="s
